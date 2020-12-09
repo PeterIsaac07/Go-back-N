@@ -1,4 +1,4 @@
-#define MAX SEQ 7
+#define MAX_SEQ 7
 typedef enum {frame_arrival, cksum_err, timeout, network_layer_ready} event_type;
 #include "protocol.h"
 
