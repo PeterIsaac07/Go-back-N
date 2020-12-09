@@ -1,6 +1,15 @@
-#define MAX_SEQ 7
+#include "header.h"
+#define MAX_SEQ 3
+#define network_layer_ready 1
+#define frame_arrival   2
+#define cksum_err 3
+#define timeout 4
+
+networkbuffer = [a,b,c,d,e,f,g,h,i,j];
+
+
+
 typedef enum {frame_arrival, cksum_err, timeout, network_layer_ready} event_type;
-#include "protocol.h"
 
 static boolean between(seq_nr a, seq_nr b, seq_nr c)
 {
@@ -15,11 +24,10 @@ static void send_data(seq_nr frame_nr, seq_nr frame_expected, packet buffer[])
 {
 /* Construct and send a data frame. */
     frame s; 						/* scratch variable */
-
     s.info = buffer[frame_nr]; 				/* insert packet into frame */
     s.seq = frame_nr; 					/* insert sequence number into frame */
     s.ack = (frame_expected + MAX_SEQ) % (MAX_SEQ + 1);	/* piggyback ack */
-    to_physical_layer(&s); 					/* transmit the frame */
+    to_physical_layer(&s); 					/* transmit the frame */ //a,b,c
     start_timer(frame_nr); 					/* start the timer running */
 }
 
@@ -79,9 +87,9 @@ void protocol5(void)
     }
 }
 
-if (nbuffered < MAX_SEQ)
-enable_network_layer();
-else
-disable_network_layer();
+    if (nbuffered < MAX_SEQ)
+    enable_network_layer();
+    else
+    disable_network_layer();
 }
 }
