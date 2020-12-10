@@ -28,7 +28,7 @@ void from_network_layer(packet* p);
 
 void to_network_layer(packet* p);
 
-void from_physical_layer(frame* r);
+void from_physical_layer(frame* r,int socket);
 
 
 void to_physical_layer(frame* s, int socket);
