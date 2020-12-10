@@ -1,6 +1,9 @@
-#define MAX_PKT 1024
-typedef enum {false,true} boolean;
+#define MAX_PKT 10
+
+typedef enum { False , True } boolean;
 typedef unsigned int seq_nr;
+typedef enum {frame_arrival, cksum_err, timeout, network_layer_ready} event_type;
+
 typedef struct
 {
 	unsigned char data[MAX_PKT];
