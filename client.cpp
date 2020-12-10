@@ -1,63 +1,43 @@
-*
-    Create a TCP socket
-*/
-#include<stdio.h>
-#include<winsock2.h>
-#pragma comment(lib,"ws2_32.lib") //Winsock Library
-int main(int argc , char *argv[])
-{
-    WSADATA wsa;
-    SOCKET s;
-    struct sockaddr_in server;
-    char *message , server_reply[2000];
-    int recv_size;
-    printf("\nInitialising Winsock...");
-    if (WSAStartup(MAKEWORD(2,2),&wsa) != 0)
-    {
-        printf("Failed. Error Code : %d",WSAGetLastError());
-        return 1;
+// Client side C/C++ program to demonstrate Socket programming 
+#include <stdio.h> 
+#include <sys/socket.h> 
+#include <arpa/inet.h> 
+#include <unistd.h> 
+#include <string.h> 
+#define PORT 8080 
+   
+int main(int argc, char const *argv[]) 
+{ 
+    int sock = 0, valread; 
+    struct sockaddr_in serv_addr; 
+    char *hello = "Hello from client"; 
+    char buffer[1024] = {0}; 
+    if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0) 
+    { 
+        printf("\n Socket creation error \n"); 
+        return -1; 
+    } 
+   
+    serv_addr.sin_family = AF_INET; 
+    serv_addr.sin_port = htons(PORT); 
+       
+    // Convert IPv4 and IPv6 addresses from text to binary form 
+    if(inet_pton(AF_INET, "127.0.0.1", &serv_addr.sin_addr)<=0)  
+    { 
+        printf("\nInvalid address/ Address not supported \n"); 
+        return -1; 
+    } 
+   
+    if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) 
+    { 
+        printf("\nConnection Failed \n"); 
+        return -1; 
+    } 
+    while(1){
+    send(sock , "hey man it a client" , 30 , 0 ); 
+    valread = read( sock , buffer, 1024); 
+    printf("%s\n",buffer ); 
     }
     
-    printf("Initialised.\n");
-    
-    //Create a socket
-    if((s = socket(AF_INET , SOCK_STREAM , 0 )) == INVALID_SOCKET)
-    {
-        printf("Could not create socket : %d" , WSAGetLastError());
-    }
-    printf("Socket created.\n");
-    
-    
-    server.sin_addr.s_addr = inet_addr("74.125.235.20");
-    server.sin_family = AF_INET;
-    server.sin_port = htons( 80 );
-    //Connect to remote server
-    if (connect(s , (struct sockaddr *)&server , sizeof(server)) < 0)
-    {
-        puts("connect error");
-        return 1;
-    }
-    
-    puts("Connected");
-    
-    //Send some data
-    message = "GET / HTTP/1.1\r\n\r\n";
-    if( send(s , message , strlen(message) , 0) < 0)
-    {
-        puts("Send failed");
-        return 1;
-    }
-    puts("Data Send\n");
-    
-    //Receive a reply from the server
-    if((recv_size = recv(s , server_reply , 2000 , 0)) == SOCKET_ERROR)
-    {
-        puts("recv failed");
-    }
-    
-    puts("Reply received\n");
-    //Add a NULL terminating character to make it a proper string before printing
-    server_reply[recv_size] = '\0';
-    puts(server_reply);
-    return 0;
-}
+    return 0; 
+} 
