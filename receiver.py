@@ -40,6 +40,7 @@ while True:
             s.send(Ack.encode())
             a = a + message
             i = i + 1
-    print(a)
-
+    n = int(a, 2)
+    decoded = n.to_bytes((n.bit_length() + 7) // 8, 'big').decode()
+    print(decoded)
     print("The message received is :", m)
