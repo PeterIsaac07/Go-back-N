@@ -1,25 +1,5 @@
-import time, socket, sys,pickle
 
-
-def decimalToBinary(n):
-    return n.replace("0b", "")
-
-
-def binarycode(s):
-    a_byte_array = bytearray(s, "utf8")
-
-    byte_list = []
-
-    for byte in a_byte_array:
-        binary_representation = bin(byte)
-        byte_list.append(decimalToBinary(binary_representation))
-
-    # print(byte_list)
-    a = ""
-    for i in byte_list:
-        a = a + i
-    return a
-
+import time, socket, sys ,pickle
 
 
 s = socket.socket()
@@ -33,16 +13,15 @@ conn, addr = s.accept()
 
 
 while True:
-    #message = input(str("enter message :"))
-    message = 'b'
+    # message = input(str("enter message :"))
+    message = 'thomas joseph kamil yousef artin'
     conn.send(message.encode())
-    message = binarycode(message)
     print(message.encode())
     messagelen = str(len(message))
     conn.send(messagelen.encode())
 
     packet_to_send = 0
-    window_size = int(input("Enter the window size -> "))
+    window_size = int(input("enter size of window: "))
 
     buffer = ""
 
@@ -56,15 +35,17 @@ while True:
             buffer = conn.recv(1024)
             buffer = buffer.decode()
             if (buffer != "ACK Lost"):
-                
-                print('{} is received, sliding window is in the range of {} to {} '.format(buffer, str(packet_to_send + 1),str(end_of_window + 1)))
+
+                print('{} is received, sliding window is in the range of {} to {} '.format(buffer, str(packet_to_send + 1)
+                                                                                           ,str(end_of_window + 1)))
                 packet_to_send = packet_to_send + 1
                 end_of_window = end_of_window + 1
-                
+
             else:
-                
-                print('Ack is lost, sliding window is in the range of {} to {} '.format(str(packet_to_send + 1),str(end_of_window + 1)))
-                
+
+                print('Ack is lost, sliding window is in the range of {} to {} '.format(str(packet_to_send + 1)
+                                                                                        ,str(end_of_window + 1)))
+
         while (packet_to_send != messagelen):
 
             conn.send(message[packet_to_send].encode())
@@ -72,11 +53,12 @@ while True:
             buffer = conn.recv(1024)
             buffer = buffer.decode()
             if (buffer != "ACK Lost"):
-                
-                print('{} is received, sliding window is in the range of {} to {} '.format(buffer, str(packet_to_send + 1),str(end_of_window + 1)))
+
+                print('{} is received, sliding window is in the range of {} to {} '.format(buffer, str(packet_to_send + 1)
+                                                                                           ,str(end_of_window + 1)))
                 packet_to_send = packet_to_send + 1
-                
+
             else:
-                
-                print('Ack is lost, sliding window is in the range of {} to {} '.format(str(packet_to_send + 1),str(end_of_window + 1)))
-                
+
+                print('Ack is lost, sliding window is in the range of {} to {} '.format(str(packet_to_send + 1)
+                                                                                        ,str(end_of_window + 1)))
